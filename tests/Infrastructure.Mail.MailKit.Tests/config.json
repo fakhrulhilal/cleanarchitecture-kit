@@ -1,0 +1,19 @@
+{
+  "Email": {
+    "Outgoing": {
+      "ServerAddress": "localhost",
+      "Port": 2525,
+      "UseSecureProtocol": false,
+      "Username": "",
+      "Password": "",
+      "ManagementPort": 8025
+    },
+    "Server": {
+      "Username": "Administrator",
+      "Password": "P@ssw0rd" 
+    } 
+  },
+  "Retry": {
+    "Max": 1 
+  }
+}

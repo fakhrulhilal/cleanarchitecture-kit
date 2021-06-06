@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>FM.Infrastructure.Mail</RootNamespace>
+    <AssemblyName>FM.Infrastructure.Mail.MailKit</AssemblyName>
+    <Description>Implementation of mail client library using MailKit</Description>
+    <PackageTags>mail,mailkit</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="2.11.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Polly" Version="7.2.2" />
+    <PackageReference Include="System.Linq.Async" Version="5.0.0" />
+  </ItemGroup>
+
+  <Import Project="..\Core.props" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\Application.Mail\Application.Mail.csproj" />
+  </ItemGroup>
+
+</Project>

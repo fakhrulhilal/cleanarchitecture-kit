@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>FM.Domain</AssemblyName>
+    <RootNamespace>FM.Domain</RootNamespace>
+    <PackageTags>cleancode, domain</PackageTags>
+    <Description>Core domain layer for all Moneyventory services</Description>
+  </PropertyGroup>
+
+  <Import Project="..\Core.props" />
+
+</Project>

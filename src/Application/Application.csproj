@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>FM.Application</AssemblyName>
+    <RootNamespace>FM.Application</RootNamespace>
+    <PackageTags>cleancode</PackageTags>
+    <Description>Core application layer for all Moneyventory services</Description>
+  </PropertyGroup>
+
+  <Import Project="..\Application.deps.props" />
+  <Import Project="..\Core.props" />
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="10.1.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>FM.Infrastructure.Cache.Redis</AssemblyName>
+    <RootNamespace>FM.Infrastructure.Cache.Redis</RootNamespace>
+    <Description>Implementation of cache library using redis &amp; in memory</Description>
+    <PackageTags>cache, redis</PackageTags>
+  </PropertyGroup>
+
+  <Import Project="..\Core.props" />
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Application.Cache\Application.Cache.csproj" />
+  </ItemGroup>
+
+</Project>
