@@ -1,5 +1,7 @@
 <Project>
 
+  <Import Project="Dotnet.props" />
+
   <PropertyGroup>
     <Authors>Fakhrulhilal Maktum</Authors>
     <Copyright>Fakhrulhilal Maktum</Copyright>
@@ -9,10 +11,10 @@
     <RepositoryUrl>https://github.com/fakhrulhilal/cleanarchitecture-kit</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <BasicPackageTags>clean architecture, starter kit, design pattern</BasicPackageTags>
   </PropertyGroup>
-
-  <Import Project="Dotnet.props" />
 
   <ItemGroup>
     <None Include="..\..\LICENSE">
@@ -20,5 +22,15 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
+
+  <ItemGroup>
+    <MainPackageFiles Include="bin\$(Configuration)\*.nupkg"></MainPackageFiles>
+    <SymbolPackageFiles Include="bin\$(Configuration)\*.snupkg"></SymbolPackageFiles>
+  </ItemGroup>
+
+  <Target Name="CopyPackage" AfterTargets="GenerateNuspec" Condition="'$(Configuration)' == 'release'">
+    <Copy SourceFiles="@(MainPackageFiles)" DestinationFolder="..\..\build\packages" />
+    <Copy SourceFiles="@(SymbolPackageFiles)" DestinationFolder="..\..\build\packages" />
+  </Target>
 
 </Project>
