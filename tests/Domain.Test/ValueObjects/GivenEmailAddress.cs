@@ -24,16 +24,16 @@ namespace FM.Domain.Tests.ValueObjects
             var exception = Assert.Throws<ArgumentNullException>(() => Email.Create(" ", "me@localhost"));
 
             Assert.That(exception, Is.Not.Null);
-            Assert.That(exception.ParamName, Is.EqualTo("displayName"));
+            Assert.That(exception!.ParamName, Is.EqualTo("displayName"));
         }
 
         [Test]
         public void WhenNullOrEmptyThenItWillThrowArgumentNullException()
         {
-            var exception = Assert.Throws<ArgumentNullException>(() => Email.Parse(null));
+            var exception = Assert.Throws<ArgumentNullException>(() => Email.Parse(string.Empty));
 
             Assert.That(exception, Is.Not.Null);
-            Assert.That(exception.ParamName, Is.Not.Null.And.EqualTo("word"));
+            Assert.That(exception!.ParamName, Is.Not.Null.And.EqualTo("word"));
         }
 
         [Test]

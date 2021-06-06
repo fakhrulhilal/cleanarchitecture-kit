@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
 
-namespace FM.Tests
+namespace FM
 {
     public class Startup
     {

@@ -1,7 +1,6 @@
 using System;
 using System.Reflection;
 using FM.Application.Ports;
-using FM.Tests;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;

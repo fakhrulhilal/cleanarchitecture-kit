@@ -1,5 +1,5 @@
 using FM.Domain.Common;
-using FM.Infrastructure.Cache.Redis;
+using FM.Infrastructure.Cache;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Configuration;

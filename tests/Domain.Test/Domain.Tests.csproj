@@ -1,11 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <RootNamespace>FM.Domain.Tests</RootNamespace>
     <AssemblyName>FM.Domain.Tests</AssemblyName>
   </PropertyGroup>
+
+  <Import Project="..\..\src\Dotnet.props" />
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />

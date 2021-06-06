@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\Core.props" />
+
   <PropertyGroup>
     <AssemblyName>FM.Infrastructure.EfCore</AssemblyName>
     <RootNamespace>FM.Infrastructure.EfCore</RootNamespace>
-    <Description>Data persistent implementation EF Core for all Moneyventory services</Description>
-    <PackageTags>cleancode, persistent, efcore, orm</PackageTags>
+    <Description>Data persistent implementation EF Core for clean architecture project</Description>
+    <PackageTags>$(BasicPackageTags), persistent, efcore, orm</PackageTags>
   </PropertyGroup>
-
-  <Import Project="..\Core.props" />
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.6" />

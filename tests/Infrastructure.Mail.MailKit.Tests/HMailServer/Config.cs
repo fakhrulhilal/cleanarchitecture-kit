@@ -2,7 +2,7 @@ namespace FM.Infrastructure.Mail.MailKit.Tests.HMailServer
 {
     public class Config
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
     }
 }

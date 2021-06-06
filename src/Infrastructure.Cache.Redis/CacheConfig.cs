@@ -1,4 +1,4 @@
-namespace FM.Infrastructure.Cache.Redis
+namespace FM.Infrastructure.Cache
 {
     public class CacheConfig
     {

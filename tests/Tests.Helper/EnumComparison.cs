@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace FM.Tests
+namespace FM
 {
     public class EnumComparison
     {

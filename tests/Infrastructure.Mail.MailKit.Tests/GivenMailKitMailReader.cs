@@ -2,7 +2,6 @@ using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
 using FM.Application.Mail;
-using FM.Tests;
 using NUnit.Framework;
 
 namespace FM.Infrastructure.Mail.MailKit.Tests

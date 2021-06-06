@@ -1,15 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\Application.deps.props" />
+  <Import Project="..\Core.props" />
+
   <PropertyGroup>
     <AssemblyName>FM.Application.Cache</AssemblyName>
     <RootNamespace>FM.Application.Cache</RootNamespace>
-    <Description>Cache extension of core application layer using distributed cache for all Moneyventory services</Description>
-    <PackageTags>cleancode, cache, distributed</PackageTags>
-    <PackageId>Moneyventory.Application.Cache</PackageId>
+    <Description>Cache extension of application layer using distributed cache for clean architecture project</Description>
+    <PackageTags>$(BasicPackageTags), cache, distributed</PackageTags>
   </PropertyGroup>
-
-  <Import Project="..\Application.deps.props" />
-  <Import Project="..\Core.props" />
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="5.0.0" />

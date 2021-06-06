@@ -1,8 +1,8 @@
 using System.Security.Claims;
+using FM.Application.Ports;
 using Microsoft.AspNetCore.Http;
-using Moneyventory.Application.Common.Port;
 
-namespace Moneyventory.Infrastructure.AspNetCore
+namespace FM.Infrastructure.AspNetCore
 {
     public class CurrentUserService : ICurrentUserService
     {

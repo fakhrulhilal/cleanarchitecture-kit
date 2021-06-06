@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\Core.props" />
+
   <PropertyGroup>
     <AssemblyName>FM.Infrastructure.Cache.Redis</AssemblyName>
-    <RootNamespace>FM.Infrastructure.Cache.Redis</RootNamespace>
+    <RootNamespace>FM.Infrastructure.Cache</RootNamespace>
     <Description>Implementation of cache library using redis &amp; in memory</Description>
-    <PackageTags>cache, redis</PackageTags>
+    <PackageTags>$(BasicPackageTags), cache, redis</PackageTags>
   </PropertyGroup>
-
-  <Import Project="..\Core.props" />
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />

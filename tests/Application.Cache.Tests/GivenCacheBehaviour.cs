@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using FM.Application.Ports;
-using FM.Tests;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +26,7 @@ namespace FM.Application.Cache.Tests
 
         [SetUp]
         public void Setup() => _bootstrapper.ConfigureServices((services, _) => services
-            .AddSingleton(_ => new FM.Domain.Common.GeneralConfig { MaxLongRunningTask = 1000 })
+            .AddSingleton(_ => new Domain.Common.GeneralConfig { MaxLongRunningTask = 1000 })
             .AddTransient(_ => Mock.Of<ICurrentUserService>())
             .AddTransient(_ => Mock.Of<IIdentityService>())
             .AddFakeLogger<Cached.Query>(log => _logMessage = log)

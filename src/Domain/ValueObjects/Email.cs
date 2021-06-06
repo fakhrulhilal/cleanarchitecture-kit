@@ -9,7 +9,7 @@ namespace FM.Domain.ValueObjects
     {
         private static readonly string _addressPattern = @"(?<address>(?<username>[\w\.\-,]+)@(?<domain>([\w\-\.]+)*[\w+]))";
         private static readonly Regex _addressOnlyPattern = new($@"^{_addressPattern}$");
-        private static readonly Regex _fullEmailPattern = new($@"^""(?<display_name>[\w\s\.\-]+)""\s+<{_addressPattern}>$");
+        private static readonly Regex _fullEmailPattern = new($@"^""(?<display_name>[\w\s\.\-,@]+)""\s+<{_addressPattern}>$");
 
         public string DisplayName { get; } = string.Empty;
         public string Address { get; }
@@ -32,7 +32,7 @@ namespace FM.Domain.ValueObjects
 
         private Email(string address, string displayName, string username, string domain) : this(address, username, domain)
         {
-            DisplayName = displayName ?? string.Empty;
+            DisplayName = displayName;
         }
 
         public static Email Empty => new();

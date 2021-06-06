@@ -17,7 +17,7 @@ namespace FM.Infrastructure.Mail.MailKit.Tests.HMailServer
     internal class Server
     {
         private readonly List<Email> _addedAccounts = new();
-        private hMailServer.Application _mailServer;
+        private hMailServer.Application _mailServer = Moq.Mock.Of<hMailServer.Application>();
         private readonly IConfiguration _config;
         private const string DefaultPassword = "P@ssw0rd";
 
@@ -114,7 +114,7 @@ namespace FM.Infrastructure.Mail.MailKit.Tests.HMailServer
             }
         }
 
-        private void AddMessage(IMailMessage mailMessage)
+        private static void AddMessage(IMailMessage mailMessage)
         {
             var message = InitComType<Message>();
             message.From = mailMessage.From;
@@ -125,7 +125,9 @@ namespace FM.Infrastructure.Mail.MailKit.Tests.HMailServer
                 message.Body = mailMessage.PlainBody;
             message.Subject = mailMessage.Subject;
             foreach (var address in mailMessage.To)
-                message.AddRecipient(address.DisplayName ?? address.Address, address.Address);
+                message.AddRecipient(
+                    !string.IsNullOrWhiteSpace(address.DisplayName) ? address.DisplayName : address.Address,
+                    address.Address);
             message.Save();
         }
 
@@ -161,10 +163,18 @@ namespace FM.Infrastructure.Mail.MailKit.Tests.HMailServer
             return domainManager;
         }
 
-        private static TOutput InitComType<TOutput>() =>
-            (TOutput)Activator.CreateInstance(Type.GetTypeFromProgID(typeof(TOutput).FullName));
+        private static TOutput InitComType<TOutput>()
+        {
+            string fullName = typeof(TOutput).FullName ??
+                              throw new InvalidOperationException($"Unknown type: {typeof(TOutput).Name}");
+            var comType = Type.GetTypeFromProgID(fullName) ??
+                          throw new InvalidOperationException($"Failed to get COM type: {fullName}");
+            object instance = Activator.CreateInstance(comType) ??
+                              throw new InvalidOperationException($"Unable to instantiate COM type: {fullName}");
+            return (TOutput)instance;
+        }
 
-        private static TOutput TryOrNull<TOutput>(Func<TOutput> factory)
+        private static TOutput? TryOrNull<TOutput>(Func<TOutput> factory)
             where TOutput : class
         {
             try

@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\Core.props" />
+
   <PropertyGroup>
     <AssemblyName>FM.Application.Mail</AssemblyName>
     <RootNamespace>FM.Application.Mail</RootNamespace>
-    <Description>Mail extension of core application layer for all Moneyventory services</Description>
-    <PackageTags>cleancode, mail, distributed</PackageTags>
+    <Description>Mail extension of application layer for clean architecture project</Description>
+    <PackageTags>$(BasicPackageTags), mail</PackageTags>
   </PropertyGroup>
-
-  <Import Project="..\Core.props" />
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />

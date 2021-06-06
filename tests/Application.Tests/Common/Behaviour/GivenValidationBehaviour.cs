@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using FluentValidation;
-using FM.Tests;
 using MediatR;
 using NUnit.Framework;
 using ValidationException = FM.Domain.Exception.ValidationException;

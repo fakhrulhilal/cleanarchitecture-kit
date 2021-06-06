@@ -1,26 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <AssemblyName>Moneyventory.Infrastructure.AspNetCore</AssemblyName>
-    <RootNamespace>Moneyventory.Infrastructure.AspNetCore</RootNamespace>
-    <Authors>Fakhrulhilal Maktum</Authors>
-    <Product>Moneyventory</Product>
-    <Description>ASP.NET core implementation for all Moneyventory services</Description>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/fakhrulhilal/moneyventory</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/fakhrulhilal/moneyventory</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageTags>cleancode, aspnetcore, webapi</PackageTags>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+  <Import Project="..\Core.props" />
 
-  <ItemGroup>
-    <None Include="..\..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
+  <PropertyGroup>
+    <AssemblyName>FM.Infrastructure.AspNetCore</AssemblyName>
+    <RootNamespace>FM.Infrastructure.AspNetCore</RootNamespace>
+    <Description>ASP.NET core implementation for clean architecture project</Description>
+    <PackageTags>$(BasicPackageTags), aspnetcore, webapi</PackageTags>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="5.4.0" />

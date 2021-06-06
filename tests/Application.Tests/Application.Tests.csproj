@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\src\Dotnet.props" />
+
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-      <IsPackable>false</IsPackable>
-      <AssemblyName>FM.Application.Tests</AssemblyName>
-      <RootNamespace>FM.Application.Tests</RootNamespace>
-      <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <AssemblyName>FM.Application.Tests</AssemblyName>
+    <RootNamespace>FM.Application.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

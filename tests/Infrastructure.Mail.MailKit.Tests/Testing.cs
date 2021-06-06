@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using FM.Application.Mail;
 using FM.Domain.Common;
 using FM.Infrastructure.Mail.MailKit.Tests.Smtp4Dev;
-using FM.Tests;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -30,7 +29,7 @@ namespace FM.Infrastructure.Mail.MailKit.Tests
             var client = _bootstrapper.GetService<ISmtp4DevClient>();
             var messages = await client.GetMessagesAsync();
             var message = messages.FirstOrDefault(filter);
-            if (message == null) return null;
+            if (message == null) return Message.Empty;
 
             message.HtmlBody = await client.GetHtmlBodyAsync(message.Id);
             return message;
@@ -62,7 +61,7 @@ namespace FM.Infrastructure.Mail.MailKit.Tests
         internal static TService GetService<TService>() where TService : notnull =>
             _bootstrapper.GetService<TService>();
 
-        internal static TService GetService<TService>(Func<TService, bool> filter) =>
+        internal static TService GetService<TService>(Func<TService, bool> filter) where TService : notnull =>
             _bootstrapper.GetService(filter);
     }
 }

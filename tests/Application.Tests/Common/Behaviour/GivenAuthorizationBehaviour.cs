@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using FM.Application.Attributes;
 using FM.Application.Ports;
 using FM.Domain.Exception;
-using FM.Tests;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;

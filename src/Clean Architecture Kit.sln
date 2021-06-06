@@ -5,6 +5,8 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FCFE5D2C-A801-44ED-96C7-A39A2EBBC7B6}"
 	ProjectSection(SolutionItems) = preProject
 		..\.editorconfig = ..\.editorconfig
+		Core.props = Core.props
+		Dotnet.props = Dotnet.props
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
@@ -34,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Helper", "..\tests\Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Cache", "Application.Cache\Application.Cache.csproj", "{4420627C-545C-4EDD-B120-E050F5861FB1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Logging", "Infrastructure.Logging\Infrastructure.Logging.csproj", "{56050672-F945-4E75-A1E6-90358C5B3A30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Logging.Serilog", "Infrastructure.Logging.Serilog\Infrastructure.Logging.Serilog.csproj", "{56050672-F945-4E75-A1E6-90358C5B3A30}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Cache.Tests", "..\tests\Application.Cache.Tests\Application.Cache.Tests.csproj", "{1C87A644-AE8A-4BE4-8ECC-CD315D800761}"
 EndProject
@@ -43,6 +45,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Cache.Redis", "Infrastructure.Cache.Redis\Infrastructure.Cache.Redis.csproj", "{E4D93CB1-5DC8-43FC-A5C9-D31A07A78CD4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application.Mail", "Application.Mail\Application.Mail.csproj", "{F875E8CE-CF71-4072-A84E-806BFFC5BD81}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.AspNetCore", "Infrastructure.AspNetCore\Infrastructure.AspNetCore.csproj", "{E4270F5B-AB81-4C7B-8DEF-56F64107B98C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -102,6 +106,10 @@ Global
 		{F875E8CE-CF71-4072-A84E-806BFFC5BD81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F875E8CE-CF71-4072-A84E-806BFFC5BD81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F875E8CE-CF71-4072-A84E-806BFFC5BD81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4270F5B-AB81-4C7B-8DEF-56F64107B98C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4270F5B-AB81-4C7B-8DEF-56F64107B98C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4270F5B-AB81-4C7B-8DEF-56F64107B98C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4270F5B-AB81-4C7B-8DEF-56F64107B98C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
-namespace FM.Tests
+namespace FM
 {
     public static class ClassComparer
     {

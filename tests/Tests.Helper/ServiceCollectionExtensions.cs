@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace FM.Tests
+namespace FM
 {
     public static class ServiceCollectionExtensions
     {

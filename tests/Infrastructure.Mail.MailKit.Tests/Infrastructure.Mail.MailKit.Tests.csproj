@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\src\Dotnet.props" />
+
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>FM.Infrastructure.Mail.MailKit.Tests</RootNamespace>
     <AssemblyName>FM.Infrastructure.Mail.MailKit.Tests</AssemblyName>
   </PropertyGroup>

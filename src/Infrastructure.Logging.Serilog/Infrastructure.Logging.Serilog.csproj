@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <AssemblyName>FM.Infrastructure.Logging</AssemblyName>
-    <RootNamespace>FM.Infrastructure.Logging</RootNamespace>
-    <Description>Logging implementation using serilog for all Moneyventory services</Description>
-    <PackageTags>cleancode, logging, serilog</PackageTags>
-  </PropertyGroup>
-
   <Import Project="..\Core.props" />
+
+  <PropertyGroup>
+    <AssemblyName>FM.Infrastructure.Logging.Serilog</AssemblyName>
+    <RootNamespace>FM.Infrastructure.Logging</RootNamespace>
+    <Description>Logging implementation using serilog for clean architecture project</Description>
+    <PackageTags>$(BasicPackageTags), logging, serilog</PackageTags>
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Serilog.CustomDestructurePolicy" Version="1.0.1" />

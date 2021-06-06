@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using FM.Domain.Common;
 using FM.Domain.Exception;
-using FM.Tests;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
