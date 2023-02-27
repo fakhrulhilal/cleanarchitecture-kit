@@ -1,16 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
+using DevKit.Domain.Exceptions;
 using FluentValidation.Results;
-using FM.Domain.Exception;
 
-namespace FM.Application.Exceptions
+namespace DevKit.Application.Exceptions;
+
+internal sealed class FluentValidationException : ValidationException
 {
-    internal sealed class FluentValidationException : ValidationException
-    {
-        public FluentValidationException(IEnumerable<ValidationFailure> failures) : base(failures
-            .GroupBy(e => e.PropertyName, e => e.ErrorMessage)
-            .ToDictionary(failureGroup => failureGroup.Key, failureGroup => failureGroup.ToArray()))
-        {
-        }
+    public FluentValidationException(IEnumerable<ValidationFailure> failures) : base(failures
+        .GroupBy(e => e.PropertyName, e => e.ErrorMessage)
+        .ToDictionary(failureGroup => failureGroup.Key, failureGroup => failureGroup.ToArray())) {
     }
 }

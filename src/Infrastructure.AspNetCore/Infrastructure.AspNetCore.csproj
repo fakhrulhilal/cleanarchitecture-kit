@@ -1,16 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\Core.props" />
+  <Import Project="..\Product.library.props" />
 
   <PropertyGroup>
-    <AssemblyName>FM.Infrastructure.AspNetCore</AssemblyName>
-    <RootNamespace>FM.Infrastructure.AspNetCore</RootNamespace>
+    <AssemblyName>$(ProductName).Infrastructure.AspNetCore</AssemblyName>
+    <RootNamespace>$(ProductName).Infrastructure.AspNetCore</RootNamespace>
     <Description>ASP.NET core implementation for clean architecture project</Description>
     <PackageTags>$(BasicPackageTags), aspnetcore, webapi</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="5.4.0" />
+    <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
   </ItemGroup>
 

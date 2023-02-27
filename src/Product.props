@@ -1,0 +1,16 @@
+<Project>
+
+  <PropertyGroup>
+    <Authors>Fakhrulhilal M</Authors>
+    <Copyright>Fakhrulhilal M</Copyright>
+    <Product>Clean Architecture Kit</Product>
+    <PackageProjectUrl>https://github.com/fakhrulhilal/cleanarchitecture-kit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/fakhrulhilal/cleanarchitecture-kit</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <BasicPackageTags>clean architecture, starter kit, design pattern</BasicPackageTags>
+    <ProductName>DevKit</ProductName>
+    <ProductVersion>2.0.0</ProductVersion>
+    <Version>$(ProductVersion)</Version>
+  </PropertyGroup>
+
+</Project>

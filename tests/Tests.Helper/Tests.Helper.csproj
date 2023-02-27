@@ -1,10 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\src\Core.props" />
+  <Import Project="..\..\src\Dotnet.props" />
+  <Import Project="..\..\src\Product.props" />
 
   <PropertyGroup>
-    <AssemblyName>FM.Tests</AssemblyName>
-    <RootNamespace>FM</RootNamespace>
+    <AssemblyName>$(ProductName).Tests</AssemblyName>
+    <RootNamespace>$(ProductName)</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>Test helper for clean architecture kit</Description>
     <PackageTags>clean architecture, starter kit, design pattern, test helper</PackageTags>
@@ -14,8 +15,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$(ExtVersion)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="$(ExtVersion)" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="NUnit" Version="3.13.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />

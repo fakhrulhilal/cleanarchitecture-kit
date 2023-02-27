@@ -3,65 +3,56 @@ using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Net.Smtp;
 using MailKit.Security;
-using NUnit.Framework;
 
-namespace FM.Infrastructure.Mail.MailKit.Tests
+namespace DevKit.Infrastructure.Mail.MailKit.Tests;
+
+[TestFixture]
+[Parallelizable(ParallelScope.Children)]
+public class GivenMailKitExtensions
 {
-    [TestFixture]
-    [Parallelizable(ParallelScope.Children)]
-    public class GivenMailKitExtensions
-    {
-        [Test]
-        public void WhenUsingSecureModeThenItWillAllTlsSpecifications()
-        {
-            using IMailService client = new SmtpClient();
+    [Test]
+    public void WhenUsingSecureModeThenItWillAllTlsSpecifications() {
+        using IMailService client = new SmtpClient();
 
-            client.ConfigureSecurity(true);
+        client.ConfigureSecurity(true);
 
-            Assert.That(client.SslProtocols & SslProtocols.Tls, Is.EqualTo(SslProtocols.Tls));
-            Assert.That(client.SslProtocols & SslProtocols.Tls11, Is.EqualTo(SslProtocols.Tls11));
-            Assert.That(client.SslProtocols & SslProtocols.Tls12, Is.EqualTo(SslProtocols.Tls12));
-            Assert.That(client.SslProtocols & SslProtocols.Tls13, Is.EqualTo(SslProtocols.Tls13));
-        }
+        Assert.That(client.SslProtocols & SslProtocols.Tls12, Is.EqualTo(SslProtocols.Tls12));
+        Assert.That(client.SslProtocols & SslProtocols.Tls13, Is.EqualTo(SslProtocols.Tls13));
+    }
 
-        [Test]
-        public void WhenUsingSecureModeThenItWillByPassCertificateRevocationCheck()
-        {
-            using IMailService client = new ImapClient();
+    [Test]
+    public void WhenUsingSecureModeThenItWillByPassCertificateRevocationCheck() {
+        using IMailService client = new ImapClient();
 
-            client.ConfigureSecurity(true);
+        client.ConfigureSecurity(true);
 
-            Assert.That(client.CheckCertificateRevocation, Is.False);
-        }
+        Assert.That(client.CheckCertificateRevocation, Is.False);
+    }
 
-        [Test]
-        public void WhenUsingSecureModeThenItWillUseAutomaticSecureSocketOptionResolution()
-        {
-            using IMailService client = new ImapClient();
+    [Test]
+    public void WhenUsingSecureModeThenItWillUseAutomaticSecureSocketOptionResolution() {
+        using IMailService client = new ImapClient();
 
-            var socketOption = client.ConfigureSecurity(true);
+        var socketOption = client.ConfigureSecurity(true);
 
-            Assert.That(socketOption, Is.EqualTo(SecureSocketOptions.Auto));
-        }
+        Assert.That(socketOption, Is.EqualTo(SecureSocketOptions.Auto));
+    }
 
-        [Test]
-        public void WhenUsingNonSecureModeThenSslProtocolWillBeOff()
-        {
-            using IMailService client = new ImapClient();
+    [Test]
+    public void WhenUsingNonSecureModeThenSslProtocolWillBeOff() {
+        using IMailService client = new ImapClient();
 
-            client.ConfigureSecurity(false);
+        client.ConfigureSecurity(false);
 
-            Assert.That(client.SslProtocols, Is.EqualTo(SslProtocols.None));
-        }
+        Assert.That(client.SslProtocols, Is.EqualTo(SslProtocols.None));
+    }
 
-        [Test]
-        public void WhenUsingNonSecureModeThenNoSecureSocketOptionWillBeUsed()
-        {
-            using IMailService client = new SmtpClient();
+    [Test]
+    public void WhenUsingNonSecureModeThenNoSecureSocketOptionWillBeUsed() {
+        using IMailService client = new SmtpClient();
 
-            var socketOptions = client.ConfigureSecurity(false);
+        var socketOptions = client.ConfigureSecurity(false);
 
-            Assert.That(socketOptions, Is.EqualTo(SecureSocketOptions.None));
-        }
+        Assert.That(socketOptions, Is.EqualTo(SecureSocketOptions.None));
     }
 }

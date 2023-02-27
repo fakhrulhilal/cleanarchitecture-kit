@@ -1,24 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\Application.deps.props" />
-  <Import Project="..\Core.props" />
+  <Import Project="..\Product.application.props" />
 
   <PropertyGroup>
-    <AssemblyName>FM.Application</AssemblyName>
-    <RootNamespace>FM.Application</RootNamespace>
+    <AssemblyName>$(ProductName).Application</AssemblyName>
+    <RootNamespace>$(ProductName).Application</RootNamespace>
     <PackageTags>$(BasicPackageTags), cleancode</PackageTags>
     <Description>Core application layer for clean architecture project</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="10.1.0" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.1.0" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.4.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="$(ExtVersion)" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="MediatR" />
+    <Using Include="Microsoft.Extensions.Logging" />
   </ItemGroup>
 
 </Project>

@@ -10,10 +10,10 @@
     },
     "Server": {
       "Username": "Administrator",
-      "Password": "P@ssw0rd" 
-    } 
+      "Password": "P@ssw0rd"
+    }
   },
   "Retry": {
-    "Max": 1 
+    "Max": 1
   }
 }

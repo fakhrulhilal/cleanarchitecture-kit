@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\src\Dotnet.props" />
+  <Import Project="..\..\src\Product.test.props" />
 
   <PropertyGroup>
-    <RootNamespace>FM.Infrastructure.Mail.MailKit.Tests</RootNamespace>
-    <AssemblyName>FM.Infrastructure.Mail.MailKit.Tests</AssemblyName>
+    <RootNamespace>$(ProductName).Infrastructure.Mail.MailKit.Tests</RootNamespace>
+    <AssemblyName>$(ProductName).Infrastructure.Mail.MailKit.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,8 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="Refit" Version="6.0.38" />
   </ItemGroup>
 

@@ -1,9 +1,12 @@
-using System;
+namespace DevKit.Application.Ports;
 
-namespace FM.Application.Ports
+/// <summary>
+///     System clock
+/// </summary>
+public interface IClock
 {
-    public interface IClock
-    {
-        DateTime Now => DateTime.UtcNow;
-    }
+    /// <summary>
+    ///     UTC now
+    /// </summary>
+    DateTime Now => DateTime.UtcNow;
 }

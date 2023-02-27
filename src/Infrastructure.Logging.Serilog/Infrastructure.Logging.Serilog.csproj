@@ -1,21 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\Core.props" />
+  <Import Project="..\Product.library.props" />
 
   <PropertyGroup>
-    <AssemblyName>FM.Infrastructure.Logging.Serilog</AssemblyName>
-    <RootNamespace>FM.Infrastructure.Logging</RootNamespace>
+    <AssemblyName>$(ProductName).Infrastructure.Logging.Serilog</AssemblyName>
+    <RootNamespace>$(ProductName).Infrastructure.Logging</RootNamespace>
     <Description>Logging implementation using serilog for clean architecture project</Description>
     <PackageTags>$(BasicPackageTags), logging, serilog</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Serilog.CustomDestructurePolicy" Version="1.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.1.3" />
-    <PackageReference Include="Serilog.Exceptions" Version="6.1.0" />
-    <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(ExtVersion)" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
+    <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.4.0" />
   </ItemGroup>
 
 </Project>

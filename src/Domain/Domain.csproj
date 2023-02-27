@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\Core.props" />
+  <Import Project="..\Product.library.props" />
 
   <PropertyGroup>
-    <AssemblyName>FM.Domain</AssemblyName>
-    <RootNamespace>FM.Domain</RootNamespace>
+    <AssemblyName>$(ProductName).Domain</AssemblyName>
+    <RootNamespace>$(ProductName).Domain</RootNamespace>
     <PackageTags>$(BasicPackageTags), domain</PackageTags>
     <Description>Core domain layer for clean architecture project</Description>
   </PropertyGroup>

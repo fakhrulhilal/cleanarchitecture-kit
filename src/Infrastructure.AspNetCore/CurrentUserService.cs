@@ -1,19 +1,17 @@
 using System.Security.Claims;
-using FM.Application.Ports;
+using DevKit.Application.Ports;
 using Microsoft.AspNetCore.Http;
 
-namespace FM.Infrastructure.AspNetCore
+namespace DevKit.Infrastructure.AspNetCore;
+
+public class CurrentUserService : ICurrentUserService
 {
-    public class CurrentUserService : ICurrentUserService
-    {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CurrentUserService(IHttpContextAccessor httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
+    public CurrentUserService(IHttpContextAccessor httpContextAccessor) =>
+        _httpContextAccessor = httpContextAccessor;
 
-        public string UserId => _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
-                                string.Empty;
-    }
+    public string UserId =>
+        _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
+        string.Empty;
 }

@@ -1,11 +1,8 @@
-using System.Threading;
-using System.Threading.Tasks;
-using FM.Domain.Event;
+using DevKit.Domain.Events;
 
-namespace FM.Application.Ports
+namespace DevKit.Application.Ports;
+
+public interface IDomainEventDispatcher
 {
-    public interface IDomainEventDispatcher
-    {
-        Task Publish(IDomainEvent domainEvent, CancellationToken cancellationToken = new());
-    }
+    Task Publish(IDomainEvent domainEvent, CancellationToken cancellationToken = new());
 }

@@ -1,7 +1,12 @@
-namespace FM.Application.Ports
+namespace DevKit.Application.Ports;
+
+/// <summary>
+///     Get current logging in user info
+/// </summary>
+public interface ICurrentUserService
 {
-    public interface ICurrentUserService
-    {
-        string UserId { get; }
-    }
+    /// <summary>
+    ///     User identifier
+    /// </summary>
+    string UserId { get; }
 }

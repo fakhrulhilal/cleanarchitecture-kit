@@ -1,21 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\Application.deps.props" />
-  <Import Project="..\Core.props" />
+  <Import Project="..\Product.application.props" />
 
   <PropertyGroup>
-    <AssemblyName>FM.Application.Cache</AssemblyName>
-    <RootNamespace>FM.Application.Cache</RootNamespace>
+    <AssemblyName>$(ProductName).Application.Cache</AssemblyName>
+    <RootNamespace>$(ProductName).Application</RootNamespace>
     <Description>Cache extension of application layer using distributed cache for clean architecture project</Description>
     <PackageTags>$(BasicPackageTags), cache, distributed</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="$(Extversion)" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="MediatR" />
   </ItemGroup>
 
 </Project>

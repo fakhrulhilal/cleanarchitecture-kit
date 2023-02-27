@@ -1,7 +1,7 @@
-using FM.Application.Ports;
+using DevKit.Application.Ports;
 
-namespace FM.Application.Adapters
+namespace DevKit.Application.Adapters;
+
+public class DefaultClock : IClock
 {
-    public class DefaultClock : IClock
-    { }
 }

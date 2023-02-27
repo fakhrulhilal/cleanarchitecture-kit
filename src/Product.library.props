@@ -1,0 +1,22 @@
+<Project>
+
+  <Import Project="Product.props" />
+  <Import Project="Dotnet.props" />
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <MainPackageFiles Include="bin\$(Configuration)\*.nupkg"></MainPackageFiles>
+    <SymbolPackageFiles Include="bin\$(Configuration)\*.snupkg"></SymbolPackageFiles>
+    <InternalsVisibleTo Include="$(AssemblyName).Tests" Condition="'Debug' == '$(Configuration)'" />
+  </ItemGroup>
+
+  <Target Name="CopyPackage" AfterTargets="GenerateNuspec" Condition="'$(Configuration)' == 'release'">
+    <Copy SourceFiles="@(MainPackageFiles)" DestinationFolder="..\..\build\packages" />
+    <Copy SourceFiles="@(SymbolPackageFiles)" DestinationFolder="..\..\build\packages" />
+  </Target>
+</Project>

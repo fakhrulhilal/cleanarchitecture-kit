@@ -1,8 +1,11 @@
 <Project>
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>true</ImplicitUsings>
+    <ExtVersion>7.0.0</ExtVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
 </Project>
