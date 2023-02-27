@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using DevKit.Application.Ports;
 using DevKit.Domain.Models;
+using Microsoft.Extensions.Options;
 
 namespace DevKit.Application.Behaviour;
 
@@ -22,8 +23,8 @@ public sealed class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavio
         ILogger<PerformanceBehaviour<TRequest, TResponse>> logger,
         ICurrentUserService currentUserService,
         IIdentityService identityService,
-        GeneralConfig systemConfig) {
-        _systemConfig = systemConfig;
+        IOptions<GeneralConfig> systemConfig) {
+        _systemConfig = systemConfig.Value;
         _logger = logger;
         _currentUserService = currentUserService;
         _identityService = identityService;

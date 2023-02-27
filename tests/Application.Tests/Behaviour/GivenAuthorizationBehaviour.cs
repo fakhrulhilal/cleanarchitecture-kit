@@ -1,4 +1,5 @@
 using DevKit.Application.Attributes;
+using DevKit.Application.Mocks;
 using DevKit.Domain.Exceptions;
 
 namespace DevKit.Application.Tests.Behaviour;
@@ -9,55 +10,41 @@ using static Testing;
 [Parallelizable(ParallelScope.Children)]
 public class GivenAuthorizationBehaviour
 {
-    private const string Role = "Administrators";
-    private const string Policy = "CanManage";
-    private const string UserId = "Admin";
-
-    private Startup Setup<TRequest>(string currentUser, Dictionary<string, string[]>? userRolesMapping = null,
-        Dictionary<string, string[]>? userPolicyMapping = null)
-        where TRequest : IRequest => ConfigureServices(services => services
-        .AddMediatRHandler<TRequest>()
-        .AddTransient(_ =>
-        {
-            var currentUserService = new Mock<ICurrentUserService>();
-            currentUserService.SetupGet(x => x.UserId).Returns(() => currentUser);
-            return currentUserService.Object;
-        })
-        .AddTransient(_ =>
-        {
-            var identityService = new Mock<IIdentityService>();
-            userRolesMapping ??= new();
-            userPolicyMapping ??= new();
-            identityService.Setup(x => x.IsInRoleAsync(It.IsAny<string>(), It.IsAny<string>()).Result)
-                .Returns<string, string>((user, role) =>
-                    userRolesMapping.ContainsKey(role) && userRolesMapping[role].Contains(user));
-            identityService.Setup(x => x.AuthorizeAsync(It.IsAny<string>(), It.IsAny<string>()).Result)
-                .Returns<string, string>((user, policy) =>
-                    userPolicyMapping.ContainsKey(policy) && userPolicyMapping[policy].Contains(user));
-            return identityService.Object;
-        }));
+    private static IServiceProvider Setup<TRequest>(SetupService setup)
+        where TRequest : IRequest<Unit> => ConfigureServices(services =>
+    {
+        services.MockHandler<TRequest>();
+        services.Mock<ICurrentUserService>(x => x.AnonymousUser());
+        services.Mock<IIdentityService>(x => x.NotGrantedForAnonymous());
+        setup(services);
+    });
 
     [Test]
     public void WhenUnauthenticatedUserExecutingGuardedCommandThenUnauthenticatedExceptionWillBeThrown() {
-        var bootstrapper = Setup<Guarded.Command>(string.Empty);
-        var mediator = bootstrapper.GetService<IMediator>();
+        var provider = Setup<Guarded.Command>(services => services
+            .Mock<ICurrentUserService>(x => x.AnonymousUser()));
+        var mediator = provider.Resolve<IMediator>();
 
-        Assert.ThrowsAsync<UnauthenticatedException>(() => mediator.Send(new Guarded.ByRole()));
+        Assert.ThrowsAsync<UnauthenticatedException>(async () => await mediator.Send(new Guarded.ByRole()));
     }
 
     [Test]
     public void
         WhenAuthenticatedUserButNotInRoleExecutingGuardedCommandThenForbiddenAccessExceptionWillBeThrown() {
-        var bootstrapper = Setup<Guarded.ByRole>(UserId, new() { [Role] = new[] { "OtherUserId" } });
-        var mediator = bootstrapper.GetService<IMediator>();
+        var provider = Setup<Guarded.ByRole>(services => services
+            .Mock<ICurrentUserService>(x => x.AuthenticatedUser())
+            .Mock<IIdentityService>(x => x.NotInRole()));
+        var mediator = provider.Resolve<IMediator>();
 
-        Assert.ThrowsAsync<ForbiddenAccessException>(() => mediator.Send(new Guarded.ByRole()));
+        Assert.ThrowsAsync<ForbiddenAccessException>(async() => await mediator.Send(new Guarded.ByRole()));
     }
 
     [Test]
     public async Task WhenAuthenticatedUserAndInRoleExecutingGuardedCommandThenItWillBeAllowed() {
-        var bootstrapper = Setup<Guarded.ByRole>(UserId, new() { [Role] = new[] { UserId } });
-        var mediator = bootstrapper.GetService<IMediator>();
+        var provider = Setup<Guarded.ByRole>(services => services
+            .Mock<ICurrentUserService>(x => x.AuthenticatedUser())
+            .Mock<IIdentityService>(x => x.GrantedByRole()));
+        var mediator = provider.Resolve<IMediator>();
 
         await mediator.Send(new Guarded.ByRole());
     }
@@ -65,18 +52,20 @@ public class GivenAuthorizationBehaviour
     [Test]
     public void
         WhenAuthenticatedUserButNoPolicyAccessExecutesGuardedCommandThenForbiddenAccessExceptionWillBeThrown() {
-        var bootstrapper =
-            Setup<Guarded.ByPolicy>(UserId, userPolicyMapping: new() { [Policy] = Array.Empty<string>() });
-        var mediator = bootstrapper.GetService<IMediator>();
+        var provider = Setup<Guarded.ByPolicy>(services => services
+            .Mock<ICurrentUserService>(x => x.AuthenticatedUser())
+            .Mock<IIdentityService>(x => x.NotInPolicy()));
+        var mediator = provider.Resolve<IMediator>();
 
         Assert.ThrowsAsync<ForbiddenAccessException>(() => mediator.Send(new Guarded.ByPolicy()));
     }
 
     [Test]
     public async Task WhenAuthenticatedUserHavingPolicyAccessExecutesGuardedCommandThenItWillBeAllowed() {
-        var bootstrapper =
-            Setup<Guarded.ByPolicy>(UserId, userPolicyMapping: new() { [Policy] = new[] { UserId } });
-        var mediator = bootstrapper.GetService<IMediator>();
+        var provider = Setup<Guarded.ByPolicy>(services => services
+            .Mock<ICurrentUserService>(x => x.AuthenticatedUser())
+            .Mock<IIdentityService>(x => x.GrantedByPolicy()));
+        var mediator = provider.Resolve<IMediator>();
 
         await mediator.Send(new Guarded.ByPolicy());
     }
@@ -86,10 +75,10 @@ public class GivenAuthorizationBehaviour
         [Authorize]
         public record Command : IRequest;
 
-        [Authorize(Roles = Role)]
+        [Authorize(Roles = "Role")]
         public record ByRole : IRequest;
 
-        [Authorize(Policy = Policy)]
+        [Authorize(Policy = "Policy")]
         public record ByPolicy : IRequest;
     }
 }

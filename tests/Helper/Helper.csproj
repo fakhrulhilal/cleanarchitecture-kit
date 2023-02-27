@@ -4,7 +4,7 @@
   <Import Project="..\..\src\Product.props" />
 
   <PropertyGroup>
-    <AssemblyName>$(ProductName).Tests</AssemblyName>
+    <AssemblyName>$(ProductName).Helper</AssemblyName>
     <RootNamespace>$(ProductName)</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Description>Test helper for clean architecture kit</Description>
@@ -15,7 +15,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="34.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="$(ExtVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="$(ExtVersion)" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="$(ExtVersion)" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="NUnit" Version="3.13.2" />
@@ -24,8 +26,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Application\Application.csproj" />
-    <ProjectReference Include="..\..\src\Infrastructure.Logging.Serilog\Infrastructure.Logging.Serilog.csproj" />
+    <Using Include="Microsoft.Extensions.DependencyInjection" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Infrastructure.Logging.Serilog\Infrastructure.Logging.Serilog.csproj" />
+  </ItemGroup>
 </Project>

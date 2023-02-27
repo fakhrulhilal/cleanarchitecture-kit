@@ -1,3 +1,5 @@
+using DevKit.Application.Behaviour;
+
 namespace DevKit.Application.Tests.Behaviour;
 
 using static Testing;
@@ -8,21 +10,18 @@ public class GivenPerformanceBehaviour
 {
     private const int MaxLongRunningTask = 1000;
 
-    private Startup Setup(Action<string> logCallback, Func<Command, CancellationToken, Task> handler) {
-        var logger = new Mock<ILogger<Command>>();
-        logger.CaptureLog(logCallback, expectedLogLevel: LogLevel.Warning);
-        return ConfigureServices(services => services
-            .AddMediatRHandler(handler)
-            .AddTransient(_ => logger.Object)
+    private static IServiceProvider Setup(Action<string> logCallback, CommandCallback<Command> callback) =>
+        ConfigureServices(services => services
+            .MockHandler(callback)
+            .MockLogger<PerformanceBehaviour<Command, Unit>>(logCallback, logLevel: LogLevel.Warning)
             .AddSingleton(_ => new GeneralConfig { MaxLongRunningTask = MaxLongRunningTask }));
-    }
 
     [Test]
     public async Task WhenRequestTakesLongerThanMaximumLongTaskThenItWillNotBeLoggedAsWarning() {
         string logMessage = string.Empty;
         var bootstrapper = Setup(log => logMessage = log,
-            (_, token) => Task.Delay(MaxLongRunningTask + 100, token));
-        var mediator = bootstrapper.GetService<IMediator>();
+            async (_, token) => await Task.Delay(MaxLongRunningTask + 100, token));
+        var mediator = bootstrapper.Resolve<IMediator>();
 
         await mediator.Send(new Command());
 
@@ -35,7 +34,7 @@ public class GivenPerformanceBehaviour
         string logMessage = string.Empty;
         var bootstrapper = Setup(log => logMessage = log,
             (_, token) => Task.Delay(MaxLongRunningTask / 2, token));
-        var mediator = bootstrapper.GetService<IMediator>();
+        var mediator = bootstrapper.Resolve<IMediator>();
 
         await mediator.Send(new Command());
 

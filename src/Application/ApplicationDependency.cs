@@ -5,14 +5,14 @@ using DevKit.Application.Behaviour;
 using DevKit.Application.Ports;
 using DevKit.Domain.Models;
 using FluentValidation;
-using Microsoft.Extensions.Configuration;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ApplicationDependency
 {
-    private static readonly Regex _configName = new(@"(Config)$", RegexOptions.IgnoreCase);
+    private static readonly Regex _configName =
+        new(@"(Config)$", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
     public static IServiceCollection AddApplicationKit(this IServiceCollection services,
         params Assembly[] assembliesToScan) {
@@ -22,24 +22,18 @@ public static class ApplicationDependency
         if (assembliesToScan.Length > 0) targetAssemblies.AddRange(assembliesToScan);
         var assemblies = targetAssemblies.Distinct().ToArray();
         return services
-            .AddSingleton(provider => provider.GetConfig<GeneralConfig>())
+            .AddConfig<GeneralConfig>()
             .AddMediator(assemblies)
             .AddValidatorsFromAssemblies(assemblies)
             .AddScoped<IDomainEventDispatcher, MediatorEventPublisher>();
     }
 
-    public static TConfig GetConfig<TConfig>(this IServiceProvider provider, string key) =>
-        provider.GetRequiredService<IConfiguration>().GetConfig<TConfig>(key);
-
-    public static TConfig GetConfig<TConfig>(this IServiceProvider provider) =>
-        provider.GetConfig<TConfig>(_configName.Replace(typeof(TConfig).Name, string.Empty));
-
-    public static TConfig GetConfig<TConfig>(this IConfiguration config) =>
-        config.GetConfig<TConfig>(_configName.Replace(typeof(TConfig).Name, string.Empty));
-
-    public static TConfig GetConfig<TConfig>(this IConfiguration config, string key) =>
-        config.GetSection(key).Get<TConfig>() ??
-        throw new InvalidOperationException($"No configuration named '{key}' found");
+    public static IServiceCollection AddConfig<TConfig>(this IServiceCollection services,
+        string? configName = null) where TConfig : class {
+        configName ??= _configName.Replace(typeof(TConfig).Name, string.Empty);
+        services.AddOptions<TConfig>().BindConfiguration(configName);
+        return services;
+    }
 
     private static IServiceCollection AddMediator(this IServiceCollection services, Assembly[] assemblies) =>
         services

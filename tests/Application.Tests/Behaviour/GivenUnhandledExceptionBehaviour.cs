@@ -1,5 +1,6 @@
 using System.Reflection;
 using DevKit.Application.Attributes;
+using DevKit.Application.Behaviour;
 using DevKit.Domain.Exceptions;
 
 namespace DevKit.Application.Tests.Behaviour;
@@ -10,31 +11,23 @@ using static Testing;
 [Parallelizable(ParallelScope.Children)]
 public class GivenUnhandledExceptionBehaviour
 {
-    private static Startup Setup<TRequest>(Action<string> logCallback, Action<Exception> errorCallback,
-        Action<TRequest> handler)
-        where TRequest : IRequest<Unit> {
-        var logger = new Mock<ILogger<TRequest>>();
-        logger.CaptureLog(logCallback, errorCallback, LogLevel.Error);
-        return ConfigureServices(services => services
-            .AddTransient(_ => logger.Object)
-            .AddMediatRHandler<TRequest>((request, _) =>
-            {
-                handler(request);
-                return Task.CompletedTask;
-            }));
-    }
+    private static IServiceProvider Setup<TRequest>(Action<string> logCallback,
+        Action<Exception> errorCallback, SyncCommandCallback<TRequest> callback)
+        where TRequest : IRequest<Unit> => ConfigureServices(services => services
+        .MockLogger<UnhandledExceptionBehaviour<TRequest, Unit>>(logCallback, errorCallback, LogLevel.Error)
+        .MockHandler(callback));
 
     [Test]
     [TestCaseSource(nameof(AllBusinessExceptions))]
     public void WhenHandlerThrowsBusinessExceptionThenItWillNotBeLogged(Type exceptionType) {
         var logMessages = new List<string>();
         var exceptions = new List<Exception>();
-        var bootstrapper = Setup<Command.Business>(logMessages.Add, exceptions.Add, request =>
+        var provider = Setup<Command.Business>(logMessages.Add, exceptions.Add, request =>
         {
             var exc = (Exception?)Activator.CreateInstance(request.ExceptionType) ?? new Exception();
             throw exc;
         });
-        var mediator = bootstrapper.GetService<IMediator>();
+        var mediator = provider.Resolve<IMediator>();
         var exception = Assert.ThrowsAsync(exceptionType,
             async () => await mediator.Send(new Command.Business(exceptionType)));
 
@@ -47,19 +40,19 @@ public class GivenUnhandledExceptionBehaviour
     public void WhenHandlerThrowsNonBusinessExceptionThenItWillBeLoggedAsError() {
         string logMessage = string.Empty;
         Exception? logException = null;
-        var bootstrapper = Setup<Command.NonBusiness>(log => logMessage = log, exc => logException = exc,
+        var provider = Setup<Command.NonBusiness>(log => logMessage = log, exc => logException = exc,
             _ => throw new UnauthorizedAccessException("intended"));
-        var mediator = bootstrapper.GetService<IMediator>();
+        var mediator = provider.Resolve<IMediator>();
 
         var exception =
             Assert.ThrowsAsync<UnauthorizedAccessException>(() => mediator.Send(new Command.NonBusiness()));
 
         Assert.That(exception, Is.Not.Null);
-        if (exception != null) Assert.That(exception.Message, Is.EqualTo("intended"));
+        Assert.That(exception!.Message, Is.EqualTo("intended"));
         string className =
             $"{nameof(GivenUnhandledExceptionBehaviour)}{nameof(Command)}{nameof(Command.NonBusiness)}";
         Assert.That(logMessage, Does.StartWith($"Unhandled exception for request {className}"));
-        Assert.That(logException, Is.SameAs(exception));
+        Assert.That(logException, Is.Not.Null.And.SameAs(exception));
     }
 
     public static IEnumerable<Type> AllBusinessExceptions

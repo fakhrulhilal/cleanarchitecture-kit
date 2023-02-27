@@ -3,22 +3,23 @@ using ValidationException = DevKit.Domain.Exceptions.ValidationException;
 
 namespace DevKit.Application.Tests.Behaviour;
 
+using static ApplicationDependencyExtensions;
 using static Testing;
 
 [TestFixture]
 [Parallelizable(ParallelScope.Children)]
 public class GivenValidationBehaviour
 {
-    [OneTimeSetUp]
-    public void Setup() => _bootstrapper = ConfigureServices(services => services
-        .AddMediatRHandler<Command.Validated>()
-        .AddMediatRHandler<Command.Unvalidated>());
-
-    private Startup _bootstrapper = new();
+    private static IServiceProvider Setup(SetupService? setup = null) => ConfigureServices(services =>
+        setup?.Invoke(services
+            .MockHandler<Command.Validated>()
+            .MockHandler<Command.Unvalidated>()));
 
     [Test]
     public void WhenValidationConfiguredAndFailThenValidationExceptionWillBeThrown() {
-        var mediator = _bootstrapper.GetService<IMediator>();
+        var provider = Setup(services => services
+            .HasErrors<Command.Validated>(Error(nameof(Command.Validated.Id))));
+        var mediator = provider.Resolve<IMediator>();
 
         Assert.That(() => mediator.Send(new Command.Validated(default)),
             Throws.InstanceOf<ValidationException>());
@@ -26,14 +27,17 @@ public class GivenValidationBehaviour
 
     [Test]
     public async Task WhenValidationConfiguredAndPassThenNoValidationExceptionWillBeThrown() {
-        var mediator = _bootstrapper.GetService<IMediator>();
+        var provider = Setup(services => services
+            .AlwaysValid<Command.Validated>());
+        var mediator = provider.Resolve<IMediator>();
 
         await mediator.Send(new Command.Validated(1));
     }
 
     [Test]
     public async Task WhenNoValidationConfiguredThenNoValidationExceptionWillBeThrown() {
-        var mediator = _bootstrapper.GetService<IMediator>();
+        var provider = Setup(services => services.MockHandler<Command.Unvalidated>());
+        var mediator = provider.Resolve<IMediator>();
 
         await mediator.Send(new Command.Unvalidated());
     }

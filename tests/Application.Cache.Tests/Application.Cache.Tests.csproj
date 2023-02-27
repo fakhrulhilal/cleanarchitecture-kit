@@ -13,7 +13,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Application.Cache\Application.Cache.csproj" />
-    <ProjectReference Include="..\Tests.Helper\Tests.Helper.csproj" />
+    <ProjectReference Include="..\Helper.Application\Helper.Application.csproj" />
+    <ProjectReference Include="..\Helper\Helper.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="MediatR" />
+    <Using Include="Moq" />
+  </ItemGroup>
 </Project>

@@ -12,14 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="config.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Application\Application.csproj" />
-    <ProjectReference Include="..\Tests.Helper\Tests.Helper.csproj" />
+    <ProjectReference Include="..\Helper.Application\Helper.Application.csproj" />
+    <ProjectReference Include="..\Helper\Helper.csproj" />
   </ItemGroup>
 
   <ItemGroup>

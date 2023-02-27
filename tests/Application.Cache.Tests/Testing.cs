@@ -1,8 +1,11 @@
 using System.Reflection;
+using DevKit.Application.Ports;
+using DevKit.Domain.Models;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace DevKit.Application.Tests;
+namespace DevKit.Application.Cache.Tests;
 
-internal class Testing
+internal static class Testing
 {
     private static readonly Assembly[] _defaultAssemblies = { typeof(Testing).GetTypeInfo().Assembly };
 

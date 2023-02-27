@@ -1,5 +1,4 @@
 using DevKit.Application.Ports;
-using Microsoft.Extensions.Logging;
 
 namespace DevKit.Application.Behaviour;
 

@@ -6,7 +6,7 @@ using Serilog;
 using Serilog.Events;
 
 namespace DevKit;
-
+/*
 public class Startup
 {
     private IServiceScope? _scope;
@@ -23,10 +23,10 @@ public class Startup
 
     public void CleanUp() => _scope?.Dispose();
 
-    public TService GetService<TService>() where TService : notnull =>
+    public TService Resolve<TService>() where TService : notnull =>
         Provider.GetRequiredService<TService>();
 
-    public TService GetService<TService>(Func<TService, bool> criteria) where TService : notnull =>
+    public TService Resolve<TService>(Func<TService, bool> criteria) where TService : notnull =>
         Provider.GetServices<TService>().First(criteria);
 
     public void ConfigureServices(Action<IServiceCollection, IConfiguration>? configure = null,
@@ -61,3 +61,4 @@ public class Startup
         return services.AddSingleton<IConfiguration>(configuration);
     }
 }
+*/
