@@ -11,14 +11,19 @@ using static Testing;
 [Parallelizable(ParallelScope.Fixtures)]
 public class GivenMailKitMailReader
 {
+    #region Helpers
+
     [OneTimeSetUp]
     public void SingleSetup() => _server.Connect();
 
     [TearDown]
     public void Setup() => _server.CleanUp();
 
-    private readonly Server _server = GetService<Server>();
+    private readonly Server _server = default!;
+    private IServiceProvider _provider = default!;
     private readonly IComparer _collectionComparer = ClassComparer.PublicProperty.IgnoreLineEnding().Build();
+
+    #endregion
 
     [Test]
     public async Task WhenValidConnectionUsingImapThenItShouldWork() {
@@ -26,7 +31,7 @@ public class GivenMailKitMailReader
         _server.PopulateConnection(recipient, MailProtocol.Imap);
         var sender = _server.CreateUniqueAccount($"{nameof(GivenMailKitMailReader)}.lab");
         var messages = _server.GenerateMessages(sender.Username, recipient.Username).ToArray();
-        var sut = GetService<IMailReader>(reader => reader.SupportedProtocol == recipient.Protocol);
+        var sut = _provider.Resolve<IMailReader>(reader => reader.SupportedProtocol == recipient.Protocol);
 
         var result = await sut.GetMessagesAsync(recipient).ToArrayAsync();
 
@@ -39,7 +44,7 @@ public class GivenMailKitMailReader
         _server.PopulateConnection(recipient, MailProtocol.Pop3);
         var sender = _server.CreateUniqueAccount($"{nameof(GivenMailKitMailReader)}.lab");
         var messages = _server.GenerateMessages(sender.Username, recipient.Username).ToArray();
-        var sut = GetService<IMailReader>(reader => reader.SupportedProtocol == recipient.Protocol);
+        var sut = _provider.Resolve<IMailReader>(reader => reader.SupportedProtocol == recipient.Protocol);
 
         var result = await sut.GetMessagesAsync(recipient).ToArrayAsync();
 

@@ -1,6 +1,5 @@
 using DevKit.Application.Ports;
 using DevKit.Domain.Models;
-using Microsoft.Extensions.Logging;
 
 namespace DevKit.Application.Behaviour;
 

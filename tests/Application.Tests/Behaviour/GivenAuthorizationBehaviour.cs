@@ -11,7 +11,7 @@ using static Testing;
 public class GivenAuthorizationBehaviour
 {
     private static IServiceProvider Setup<TRequest>(SetupService setup)
-        where TRequest : IRequest<Unit> => ConfigureServices(services =>
+        where TRequest : IRequest<Unit> => Configure(services =>
     {
         services.MockHandler<TRequest>();
         services.Mock<ICurrentUserService>(x => x.AnonymousUser());
@@ -36,7 +36,7 @@ public class GivenAuthorizationBehaviour
             .Mock<IIdentityService>(x => x.NotInRole()));
         var mediator = provider.Resolve<IMediator>();
 
-        Assert.ThrowsAsync<ForbiddenAccessException>(async() => await mediator.Send(new Guarded.ByRole()));
+        Assert.ThrowsAsync<ForbiddenAccessException>(async () => await mediator.Send(new Guarded.ByRole()));
     }
 
     [Test]

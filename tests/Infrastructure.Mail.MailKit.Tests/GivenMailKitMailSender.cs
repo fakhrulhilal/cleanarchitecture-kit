@@ -27,8 +27,8 @@ public class GivenMailKitMailSender
             From = $"sender@{domain}",
             To = { $"to@{domain}" }
         };
-        var sut = GetService<IMailSender>();
-        var config = GetService<EmailConfig.OutgoingConfig>();
+        var sut = Resolve<IMailSender>();
+        var config = Resolve<EmailConfig.OutgoingConfig>();
 
         await sut.SendAsync(config, message);
 
@@ -51,8 +51,8 @@ public class GivenMailKitMailSender
             From = $"sender@{domain}",
             To = { $"to@{domain}" }
         };
-        var sut = GetService<IMailSender>();
-        var config = GetService<EmailConfig.OutgoingConfig>();
+        var sut = Resolve<IMailSender>();
+        var config = Resolve<EmailConfig.OutgoingConfig>();
 
         config.UseSecureMode = true;
         await sut.SendAsync(config, message);
@@ -65,8 +65,8 @@ public class GivenMailKitMailSender
     [Test]
     public async Task WhenBothUsernameAndPasswordProvidedThenItWillUseThemToAuthenticate() {
         var client = new Mock<ISmtpClient>();
-        var bootstrapper = ConfigureServices(services => services.AddTransient(_ => client.Object));
-        var sut = bootstrapper.GetService<IMailSender>();
+        var bootstrapper = Configure(services => services.AddTransient(_ => client.Object));
+        var sut = bootstrapper.Resolve<IMailSender>();
         var account = new EmailConfig.OutgoingConfig { Username = "sender@domain", Password = "secret" };
         var message = new MailMessage {
             Subject = Guid.NewGuid().ToString("n"),
@@ -84,8 +84,8 @@ public class GivenMailKitMailSender
     [Test]
     public async Task WhenOneOfUsernameOrPasswordNotProvidedThenItWillConnectToServerAnonymously() {
         var client = new Mock<ISmtpClient>();
-        var bootstrapper = ConfigureServices(services => services.AddTransient(_ => client.Object));
-        var sut = bootstrapper.GetService<IMailSender>();
+        var bootstrapper = Configure(services => services.AddTransient(_ => client.Object));
+        var sut = bootstrapper.Resolve<IMailSender>();
         var account = new EmailConfig.OutgoingConfig { Username = "sender@domain", Password = string.Empty };
         var message = new MailMessage {
             Subject = Guid.NewGuid().ToString("n"),

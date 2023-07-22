@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Infrastructure.Mail.MailKit\Infrastructure.Mail.MailKit.csproj" />
-    <ProjectReference Include="..\Tests.Helper\Tests.Helper.csproj" />
+    <ProjectReference Include="..\Helper\Helper.csproj" />
   </ItemGroup>
 
 </Project>

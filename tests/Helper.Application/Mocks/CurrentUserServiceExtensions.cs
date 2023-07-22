@@ -12,7 +12,7 @@ public static class CurrentUserServiceExtensions
     }
 
     public static Mock<ICurrentUserService> AuthenticatedUser(this Mock<ICurrentUserService> svc) {
-        svc.SetupGet(x => x.UserId).Returns(Faker.Person.UserName);
+        svc.SetupGet(x => x.UserId).Returns(Generator.Person.UserName);
         return svc;
     }
 }

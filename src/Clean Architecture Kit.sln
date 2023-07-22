@@ -5,7 +5,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FCFE5D2C-A801-44ED-96C7-A39A2EBBC7B6}"
 	ProjectSection(SolutionItems) = preProject
 		..\.editorconfig = ..\.editorconfig
-		Product.application.props = Product.application.props
 		Product.props = Product.props
 		Dotnet.props = Dotnet.props
 		Product.library.props = Product.library.props

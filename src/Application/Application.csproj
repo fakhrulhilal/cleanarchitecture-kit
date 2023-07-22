@@ -1,27 +1,29 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\Product.application.props" />
+  <Import Project="..\Product.library.props" />
 
   <PropertyGroup>
     <AssemblyName>$(ProductName).Application</AssemblyName>
     <RootNamespace>$(ProductName).Application</RootNamespace>
     <PackageTags>$(BasicPackageTags), cleancode</PackageTags>
-    <Description>Core application layer for clean architecture project</Description>
+    <Description>Core application layer for batch mailer</Description>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.4.0" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.6.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="$(ExtVersion)" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Domain\Domain.csproj" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(ExtVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="$(ExtVersion)" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="MediatR" />
+    <Using Include="Microsoft.Extensions.DependencyInjection" />
     <Using Include="Microsoft.Extensions.Logging" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
 </Project>

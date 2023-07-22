@@ -117,6 +117,6 @@ public static class ApplicationDependencyExtensions
     }
     
     public static ValidationFailure Error(string propertyName, string? message = null) => new() {
-        PropertyName = propertyName, ErrorMessage = message ?? Faker.Lorem.Sentence()
+        PropertyName = propertyName, ErrorMessage = message ?? Generator.Lorem.Sentence()
     };
 }

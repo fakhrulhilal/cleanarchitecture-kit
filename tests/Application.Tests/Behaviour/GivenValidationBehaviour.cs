@@ -10,7 +10,7 @@ using static Testing;
 [Parallelizable(ParallelScope.Children)]
 public class GivenValidationBehaviour
 {
-    private static IServiceProvider Setup(SetupService? setup = null) => ConfigureServices(services =>
+    private static IServiceProvider Setup(SetupService? setup = null) => Configure(services =>
         setup?.Invoke(services
             .MockHandler<Command.Validated>()
             .MockHandler<Command.Unvalidated>()));

@@ -13,7 +13,7 @@ public class GivenUnhandledExceptionBehaviour
 {
     private static IServiceProvider Setup<TRequest>(Action<string> logCallback,
         Action<Exception> errorCallback, SyncCommandCallback<TRequest> callback)
-        where TRequest : IRequest<Unit> => ConfigureServices(services => services
+        where TRequest : IRequest<Unit> => Configure(services => services
         .MockLogger<UnhandledExceptionBehaviour<TRequest, Unit>>(logCallback, errorCallback, LogLevel.Error)
         .MockHandler(callback));
 

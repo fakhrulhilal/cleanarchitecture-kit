@@ -198,19 +198,18 @@ public class GivenCacheBehaviour
     }
 
     #region Helper
-    
+
     private static readonly Assembly _thisAssembly = typeof(GivenCacheBehaviour).GetTypeInfo().Assembly;
     private readonly IComparer _publicProperty = ClassComparer.PublicProperty.Build();
-    
-    private IServiceProvider Setup(SetupService setup, TimeWrapper? time = null) => ConfigureServices(svc =>
-        setup(svc
-            .AddCacheKit(_thisAssembly)
-            .AddDistributedMemoryCache(options =>
-            {
-                var clock = new Mock<ISystemClock>();
-                clock.SetupGet(x => x.UtcNow).Returns(() => time?.UtcNow ?? DateTimeOffset.UtcNow);
-                options.Clock = clock.Object;
-            })));
+
+    private IServiceProvider Setup(SetupService setup, TimeWrapper? time = null) => Configure(svc => setup(svc
+        .AddCacheKit(_thisAssembly)
+        .AddDistributedMemoryCache(options =>
+        {
+            var clock = new Mock<ISystemClock>();
+            clock.SetupGet(x => x.UtcNow).Returns(() => time?.UtcNow ?? DateTimeOffset.UtcNow);
+            options.Clock = clock.Object;
+        })));
 
     private static string GetCacheKey<TQuery>(TQuery query) where TQuery : Cached.Query =>
         $"{typeof(TQuery).FullName}:{query.Id}";
