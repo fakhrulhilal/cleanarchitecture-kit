@@ -5,26 +5,19 @@ using DevKit.Domain.Exceptions;
 
 namespace DevKit.Application.Behaviour;
 
-public sealed class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public sealed class AuthorizationBehaviour<TRequest, TResponse>(
+    ICurrentUserService currentUserService,
+    IIdentityService identityService)
+    : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    private readonly ICurrentUserService _currentUserService;
-    private readonly IIdentityService _identityService;
-
-    public AuthorizationBehaviour(
-        ICurrentUserService currentUserService,
-        IIdentityService identityService) {
-        _currentUserService = currentUserService;
-        _identityService = identityService;
-    }
-
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken) {
         var authorizeAttributes = request.GetType().GetCustomAttributes<AuthorizeAttribute>().ToArray();
         if (!authorizeAttributes.Any()) return await next();
 
         // Must be authenticated user
-        string userId = _currentUserService.UserId;
+        string userId = currentUserService.UserId;
         if (string.IsNullOrWhiteSpace(userId))
             throw new UnauthenticatedException();
 
@@ -35,7 +28,7 @@ public sealed class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehav
             foreach (string[] roles in authorizeAttributesWithRoles.Select(a => a.Roles.Split(','))) {
                 bool authorized = false;
                 foreach (string role in roles) {
-                    bool isInRole = await _identityService.IsInRoleAsync(userId, role.Trim());
+                    bool isInRole = await identityService.IsInRoleAsync(userId, role.Trim());
                     if (isInRole) {
                         authorized = true;
                         break;
@@ -52,7 +45,7 @@ public sealed class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehav
             authorizeAttributes.Where(a => !string.IsNullOrWhiteSpace(a.Policy)).ToArray();
         if (authorizeAttributesWithPolicies.Any()) {
             foreach (string policy in authorizeAttributesWithPolicies.Select(a => a.Policy)) {
-                bool authorized = await _identityService.AuthorizeAsync(userId, policy);
+                bool authorized = await identityService.AuthorizeAsync(userId, policy);
                 if (!authorized) throw new ForbiddenAccessException();
             }
         }

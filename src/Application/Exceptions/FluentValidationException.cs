@@ -3,10 +3,7 @@ using FluentValidation.Results;
 
 namespace DevKit.Application.Exceptions;
 
-internal sealed class FluentValidationException : ValidationException
-{
-    public FluentValidationException(IEnumerable<ValidationFailure> failures) : base(failures
+internal sealed class FluentValidationException(IEnumerable<ValidationFailure> failures)
+    : ValidationException(failures
         .GroupBy(e => e.PropertyName, e => e.ErrorMessage)
-        .ToDictionary(failureGroup => failureGroup.Key, failureGroup => failureGroup.ToArray())) {
-    }
-}
+        .ToDictionary(failureGroup => failureGroup.Key, failureGroup => failureGroup.ToArray()));

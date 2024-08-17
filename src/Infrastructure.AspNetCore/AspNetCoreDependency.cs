@@ -28,9 +28,9 @@ public static class AspNetCoreDependency
                 new ValidationProblemDetails(validation.Errors) {
                     Title = "Bad request", Status = StatusCodes.Status400BadRequest
                 });
-            opt.Map<NotFoundException>(_ =>
+            opt.Map<NotFoundException>(provider =>
                 new StatusCodeProblemDetails(StatusCodes.Status404NotFound) {
-                    Instance = $"{baseApiPath}/{_.Entity}"
+                    Instance = $"{baseApiPath}/{provider.Entity}"
                 });
             bool isDevelopment =
                 (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ??

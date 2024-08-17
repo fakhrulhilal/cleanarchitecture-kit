@@ -9,12 +9,9 @@ namespace DevKit.Infrastructure.Mail;
 /// <summary>
 ///     POP3 client
 /// </summary>
-public class MailKitPop3Reader : MailKitMailReader<MailKitPop3Reader, IPop3Client, IPop3Client, int>
+public class MailKitPop3Reader(ILogger<MailKitPop3Reader> log, RetryConfig retryConfig, IPop3Client client)
+    : MailKitMailReader<MailKitPop3Reader, IPop3Client, IPop3Client, int>(log, retryConfig, client)
 {
-    public MailKitPop3Reader(ILogger<MailKitPop3Reader> log, RetryConfig retryConfig, IPop3Client client)
-        : base(log, retryConfig, client) {
-    }
-
     public override MailProtocol SupportedProtocol => MailProtocol.Pop3;
 
     protected override async Task<bool> DeleteMessageAsync(IPop3Client container, int id,

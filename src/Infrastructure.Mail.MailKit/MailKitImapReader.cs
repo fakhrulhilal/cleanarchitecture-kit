@@ -8,12 +8,9 @@ using MimeKit;
 
 namespace DevKit.Infrastructure.Mail;
 
-public class MailKitImapReader : MailKitMailReader<MailKitImapReader, IImapClient, IMailFolder, UniqueId>
+public class MailKitImapReader(ILogger<MailKitImapReader> log, RetryConfig retryConfig, IImapClient client)
+    : MailKitMailReader<MailKitImapReader, IImapClient, IMailFolder, UniqueId>(log, retryConfig, client)
 {
-    public MailKitImapReader(ILogger<MailKitImapReader> log, RetryConfig retryConfig, IImapClient client)
-        : base(log, retryConfig, client) {
-    }
-
     public override MailProtocol SupportedProtocol => MailProtocol.Imap;
 
     protected override async Task<IMailFolder?> InitContainerAsync(IImapClient client,

@@ -8,19 +8,16 @@ namespace DevKit.Application.Ports;
 /// </summary>
 /// <typeparam name="TRequest">The type of the request who's response will be cached.</typeparam>
 /// <typeparam name="TResponse">The type of the response of the request that will be cached.</typeparam>
-public abstract class CacheRegistrar<TRequest, TResponse> : ICacheRegistrar<TRequest, TResponse>
+public abstract class CacheRegistrar<TRequest, TResponse>(IDistributedCache distributedCache)
+    : ICacheRegistrar<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    private readonly IDistributedCache _distributedCache;
-
-    protected CacheRegistrar(IDistributedCache distributedCache) => _distributedCache = distributedCache;
-
     protected virtual DateTime? AbsoluteExpiration { get; } = null;
     protected virtual TimeSpan? AbsoluteExpirationRelativeToNow { get; } = null;
     protected virtual TimeSpan? SlidingExpiration { get; } = null;
 
     public virtual async Task<TResponse?> GetAsync(TRequest request, CancellationToken cancellationToken) =>
-        await _distributedCache.GetAsync<TResponse>(GetCacheKey(GetRetrievingIdentifier(request)),
+        await distributedCache.GetAsync<TResponse>(GetCacheKey(GetRetrievingIdentifier(request)),
             cancellationToken);
 
     /// <summary>
@@ -34,7 +31,7 @@ public abstract class CacheRegistrar<TRequest, TResponse> : ICacheRegistrar<TReq
     /// <returns></returns>
     public virtual async Task SetAsync(TRequest request, TResponse response,
         CancellationToken cancellationToken) =>
-        await _distributedCache.SetAsync(response,
+        await distributedCache.SetAsync(response,
             GetStoringIdentifiers(request, response).Select(GetCacheKey).ToArray(),
             new() {
                 AbsoluteExpiration = AbsoluteExpiration,
@@ -54,7 +51,7 @@ public abstract class CacheRegistrar<TRequest, TResponse> : ICacheRegistrar<TReq
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public Task RemoveAsync(string cacheKeyIdentifier, CancellationToken cancellationToken) =>
-        _distributedCache.RemoveAsync(GetCacheKey(cacheKeyIdentifier), cancellationToken);
+        distributedCache.RemoveAsync(GetCacheKey(cacheKeyIdentifier), cancellationToken);
 
     /// <summary>
     ///     Override and return a string key to uniquely identify the cached response when retrieving.

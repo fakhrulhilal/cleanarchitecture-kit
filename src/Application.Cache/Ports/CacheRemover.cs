@@ -22,14 +22,11 @@ namespace DevKit.Application.Ports;
 ///     <typeparamref name="TRequest"/>
 /// </typeparam>
 /// <typeparam name="TCachedResponse">The type of the response that is cached by a <typeparamref name="TCachedResponse"/>.</typeparam>
-public abstract class CacheRemover<TRequest, TCachedRequest, TCachedResponse> : ICacheRemover<TRequest>
+public abstract class CacheRemover<TRequest, TCachedRequest, TCachedResponse>(
+    ICacheRegistrar<TCachedRequest, TCachedResponse> cacheRegistrar)
+    : ICacheRemover<TRequest>
     where TCachedRequest : IRequest<TCachedResponse>
 {
-    private readonly ICacheRegistrar<TCachedRequest, TCachedResponse> _cacheRegistrar;
-
-    protected CacheRemover(ICacheRegistrar<TCachedRequest, TCachedResponse> cacheRegistrar) =>
-        _cacheRegistrar = cacheRegistrar;
-
     /// <summary>
     ///     Removes the cached response entry for a request identified by this requests CacheKeyIdentifier
     /// </summary>
@@ -37,7 +34,7 @@ public abstract class CacheRemover<TRequest, TCachedRequest, TCachedResponse> : 
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public async Task RemoveAsync(TRequest request, CancellationToken cancellationToken) =>
-        await _cacheRegistrar.RemoveAsync(GetRetrievingIdentifier(request), cancellationToken);
+        await cacheRegistrar.RemoveAsync(GetRetrievingIdentifier(request), cancellationToken);
 
     protected abstract string GetRetrievingIdentifier(TRequest command);
 }

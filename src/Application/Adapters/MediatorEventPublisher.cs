@@ -4,20 +4,13 @@ using DevKit.Domain.Models;
 
 namespace DevKit.Application.Adapters;
 
-public class MediatorEventPublisher : IDomainEventDispatcher
+public class MediatorEventPublisher(IPublisher publisher, ILogger<MediatorEventPublisher> logger)
+    : IDomainEventDispatcher
 {
-    private readonly ILogger<MediatorEventPublisher> _logger;
-    private readonly IPublisher _publisher;
-
-    public MediatorEventPublisher(IPublisher publisher, ILogger<MediatorEventPublisher> logger) {
-        _logger = logger;
-        _publisher = publisher;
-    }
-
     public async Task Publish(IDomainEvent domainEvent, CancellationToken cancellationToken = new()) {
         var domainEventType = domainEvent.GetType();
-        _logger.LogDebug("Publishing domain event: {event}", domainEventType.GetClassName());
-        await _publisher.Publish(ConvertToNotification(domainEventType, domainEvent), cancellationToken);
+        logger.LogDebug("Publishing domain event: {event}", domainEventType.GetClassName());
+        await publisher.Publish(ConvertToNotification(domainEventType, domainEvent), cancellationToken);
     }
 
     private static INotification ConvertToNotification(Type type, IDomainEvent domainEvent) =>

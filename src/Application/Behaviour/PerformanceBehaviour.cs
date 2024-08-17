@@ -10,25 +10,16 @@ namespace DevKit.Application.Behaviour;
 /// </summary>
 /// <typeparam name="TRequest"></typeparam>
 /// <typeparam name="TResponse"></typeparam>
-public sealed class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public sealed class PerformanceBehaviour<TRequest, TResponse>(
+    ILogger<PerformanceBehaviour<TRequest, TResponse>> logger,
+    ICurrentUserService currentUserService,
+    IIdentityService identityService,
+    IOptions<GeneralConfig> systemConfig)
+    : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    private readonly ICurrentUserService _currentUserService;
-    private readonly IIdentityService _identityService;
-    private readonly ILogger<PerformanceBehaviour<TRequest, TResponse>> _logger;
-    private readonly GeneralConfig _systemConfig;
+    private readonly GeneralConfig _systemConfig = systemConfig.Value;
     private readonly Stopwatch _timer = new();
-
-    public PerformanceBehaviour(
-        ILogger<PerformanceBehaviour<TRequest, TResponse>> logger,
-        ICurrentUserService currentUserService,
-        IIdentityService identityService,
-        IOptions<GeneralConfig> systemConfig) {
-        _systemConfig = systemConfig.Value;
-        _logger = logger;
-        _currentUserService = currentUserService;
-        _identityService = identityService;
-    }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken) {
@@ -38,10 +29,10 @@ public sealed class PerformanceBehaviour<TRequest, TResponse> : IPipelineBehavio
         long elapsed = _timer.ElapsedMilliseconds;
         if (elapsed <= _systemConfig.MaxLongRunningTask) return response;
 
-        string userId = _currentUserService.UserId;
+        string userId = currentUserService.UserId;
         string userName = string.Empty;
-        if (!string.IsNullOrEmpty(userId)) userName = await _identityService.GetUserNameAsync(userId);
-        _logger.LogWarning(
+        if (!string.IsNullOrEmpty(userId)) userName = await identityService.GetUserNameAsync(userId);
+        logger.LogWarning(
             "Long running request: {Name} ({Elapsed} milliseconds) {UserId} {UserName} {@Request}",
             typeof(TRequest).GetClassName(), elapsed, userId, userName, request);
         return response;

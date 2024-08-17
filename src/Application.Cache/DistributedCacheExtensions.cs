@@ -37,9 +37,7 @@ internal static class DistributedCacheExtensions
         return string.IsNullOrWhiteSpace(json) ? default : JsonSerializer.Deserialize<TValue>(json);
     }
 
-    private struct Dummy
-    {
-    }
+    private struct Dummy;
 
     private class CacheItem<TEntity>
     {

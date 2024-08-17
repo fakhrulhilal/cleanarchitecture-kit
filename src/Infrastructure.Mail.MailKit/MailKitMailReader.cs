@@ -11,23 +11,17 @@ using Polly;
 
 namespace DevKit.Infrastructure.Mail;
 
-public abstract class MailKitMailReader<TReader, TClient, TMessageContainer, TMessageId> : IMailReader
+public abstract class MailKitMailReader<TReader, TClient, TMessageContainer, TMessageId>(
+    ILogger<MailKitMailReader<TReader, TClient, TMessageContainer, TMessageId>> log,
+    RetryConfig retryConfig,
+    TClient client)
+    : IMailReader
     where TReader : IMailReader
     where TClient : IMailService
     where TMessageId : struct
     where TMessageContainer : class
 {
-    private readonly TClient _client;
-    private readonly ILogger<MailKitMailReader<TReader, TClient, TMessageContainer, TMessageId>> _log;
-    private readonly RetryConfig _retryConfig;
-
-    protected MailKitMailReader(
-        ILogger<MailKitMailReader<TReader, TClient, TMessageContainer, TMessageId>> log,
-        RetryConfig retryConfig, TClient client) {
-        _client = client;
-        _retryConfig = retryConfig;
-        _log = log;
-    }
+    private readonly TClient _client = client;
 
     public abstract MailProtocol SupportedProtocol { get; }
 
@@ -38,8 +32,8 @@ public abstract class MailKitMailReader<TReader, TClient, TMessageContainer, TMe
             throw new InvalidOperationException($"Invalid email protocol: {cfg.Protocol}");
         var container = await Policy
             .Handle<SocketException>().Or<IOException>().Or<SslHandshakeException>()
-            .WaitAndRetryAsync(_retryConfig.Max, _ => _retryConfig.Delay,
-                (exc, delay, attempt, _) => _log.LogError(exc, Message.ConnError, attempt, cfg, delay))
+            .WaitAndRetryAsync(retryConfig.Max, _ => retryConfig.Delay,
+                (exc, delay, attempt, _) => log.LogError(exc, Message.ConnError, attempt, cfg, delay))
             .ExecuteAsync(token => InitContainerAsync(_client, cfg, token), cancellationToken);
         if (container == null)
             throw new InvalidOperationException("Message container must be initialized properly");
@@ -47,11 +41,11 @@ public abstract class MailKitMailReader<TReader, TClient, TMessageContainer, TMe
         var ids = await GetMessageIdsAsync(container, query?.Limit, cancellationToken);
         foreach (var id in ids) {
             var message = await TryOrNull(token => GetMessageAsync(container, id, token), cancellationToken,
-                Message.ReceiveError, _retryConfig.Max, id, cfg.Username);
+                Message.ReceiveError, retryConfig.Max, id, cfg.Username);
             if (message == null || (!query?.AutoDelete ?? false)) continue;
 
             _ = await TryOrNull(token => DeleteMessageAsync(container, id, token), cancellationToken,
-                Message.DeleteError, _retryConfig.Max, id, cfg.Username);
+                Message.DeleteError, retryConfig.Max, id, cfg.Username);
             yield return message.ToPort();
         }
 
@@ -62,13 +56,13 @@ public abstract class MailKitMailReader<TReader, TClient, TMessageContainer, TMe
         CancellationToken cancellationToken, string errorMessage, params object[] arguments) {
         try {
             return await Policy.Handle<SocketException>()
-                .WaitAndRetryAsync(_retryConfig.Max, _ => _retryConfig.Delay,
-                    (exc, delay, attempt, _) => _log.LogError(exc, Message.RetryError, delay, attempt))
+                .WaitAndRetryAsync(retryConfig.Max, _ => retryConfig.Delay,
+                    (exc, delay, attempt, _) => log.LogError(exc, Message.RetryError, delay, attempt))
                 .ExecuteAsync(action, cancellationToken);
         }
         catch (Exception exception) {
             // ReSharper disable once TemplateIsNotCompileTimeConstantProblem
-            _log.LogError(exception, errorMessage, arguments);
+            log.LogError(exception, errorMessage, arguments);
         }
 
         return default;
@@ -78,7 +72,7 @@ public abstract class MailKitMailReader<TReader, TClient, TMessageContainer, TMe
         EmailConfig.IncomingConfig config, CancellationToken cancellationToken) {
         if (string.IsNullOrWhiteSpace(config.Username))
             throw new ArgumentException("Email account username cannot be empty", nameof(config));
-        _log.LogDebug(Message.ConnDebug, config);
+        log.LogDebug(Message.ConnDebug, config);
         var socketOptions = client.ConfigureSecurity(config.UseSecureMode);
         await client.ConnectAsync(config.ServerAddress, config.Port, socketOptions, cancellationToken);
         await client.AuthenticateAsync(config.Username, config.Password, cancellationToken);

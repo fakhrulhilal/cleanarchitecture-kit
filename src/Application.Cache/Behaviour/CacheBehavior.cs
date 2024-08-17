@@ -17,17 +17,13 @@ namespace DevKit.Application.Behaviour;
 /// </summary>
 /// <typeparam name="TRequest">The type of the request that will have it's result cached.</typeparam>
 /// <typeparam name="TResponse">The response of the request to be cached.</typeparam>
-public sealed class CacheBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public sealed class CacheBehavior<TRequest, TResponse>(
+    ILogger<CacheBehavior<TRequest, TResponse>> logger,
+    IEnumerable<ICacheRegistrar<TRequest, TResponse>> cachedRequests)
+    : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    private readonly List<ICacheRegistrar<TRequest, TResponse>> _caches;
-    private readonly ILogger<CacheBehavior<TRequest, TResponse>> _logger;
-
-    public CacheBehavior(ILogger<CacheBehavior<TRequest, TResponse>> logger,
-        IEnumerable<ICacheRegistrar<TRequest, TResponse>> cachedRequests) {
-        _logger = logger;
-        _caches = cachedRequests.ToList();
-    }
+    private readonly List<ICacheRegistrar<TRequest, TResponse>> _caches = cachedRequests.ToList();
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken) {
@@ -42,13 +38,13 @@ public sealed class CacheBehavior<TRequest, TResponse> : IPipelineBehavior<TRequ
         var cachedResult = await cacheRequest.GetAsync(request, cancellationToken);
         if (cachedResult != null) {
             // cached response found, return and short-circuit the pipeline
-            _logger.LogDebug("Cache hit, returning {@CachedResult} for {@Request}", cachedResult, request);
+            logger.LogDebug("Cache hit, returning {@CachedResult} for {@Request}", cachedResult, request);
             return cachedResult;
         }
 
         // No cached response was found so continue the handler pipeline and cache the result
         var result = await next();
-        _logger.LogDebug("Cache miss, saving {@Response} to cache for {@Request}", result, request);
+        logger.LogDebug("Cache miss, saving {@Response} to cache for {@Request}", result, request);
         await cacheRequest.SetAsync(request, result, cancellationToken);
         return result;
     }

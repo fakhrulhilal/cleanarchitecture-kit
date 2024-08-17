@@ -18,17 +18,13 @@ namespace DevKit.Application.Behaviour;
 ///     The response of the request that causes invalidation of other cached request
 ///     responses.
 /// </typeparam>
-public sealed class CacheInvalidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+public sealed class CacheInvalidationBehavior<TRequest, TResponse>(
+    ILogger<CacheInvalidationBehavior<TRequest, TResponse>> logger,
+    IEnumerable<ICacheRemover<TRequest>> cacheRemovers)
+    : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
-    private readonly List<ICacheRemover<TRequest>> _cacheRemovers;
-    private readonly ILogger<CacheInvalidationBehavior<TRequest, TResponse>> _logger;
-
-    public CacheInvalidationBehavior(ILogger<CacheInvalidationBehavior<TRequest, TResponse>> logger,
-        IEnumerable<ICacheRemover<TRequest>> cacheRemovers) {
-        _logger = logger;
-        _cacheRemovers = cacheRemovers.ToList();
-    }
+    private readonly List<ICacheRemover<TRequest>> _cacheRemovers = cacheRemovers.ToList();
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken) {
@@ -39,7 +35,7 @@ public sealed class CacheInvalidationBehavior<TRequest, TResponse> : IPipelineBe
         // now loop through each cache remover for this request type and call the Invalidate method passing
         // an instance of this request in order to retrieve a cache key.
         foreach (var cache in _cacheRemovers) {
-            _logger.LogDebug("Removing cache after getting {RequestName}", requestName);
+            logger.LogDebug("Removing cache after getting {RequestName}", requestName);
             await cache.RemoveAsync(request, cancellationToken);
         }
 
