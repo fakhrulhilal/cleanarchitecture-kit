@@ -19,9 +19,9 @@ namespace DevKit.Application.Ports;
 /// </typeparam>
 /// <typeparam name="TCachedRequest">
 ///     The type of the request that has been cached and should be invalidated by
-///     TRequest
+///     <typeparamref name="TRequest"/>
 /// </typeparam>
-/// <typeparam name="TCachedResponse">The type of the response that is cached by a TCachedRequest.</typeparam>
+/// <typeparam name="TCachedResponse">The type of the response that is cached by a <typeparamref name="TCachedResponse"/>.</typeparam>
 public abstract class CacheRemover<TRequest, TCachedRequest, TCachedResponse> : ICacheRemover<TRequest>
     where TCachedRequest : IRequest<TCachedResponse>
 {

@@ -1,6 +1,8 @@
 using DevKit.Application.Models;
 using DevKit.Domain.Models;
+#if OS_WINDOWS
 using DevKit.Infrastructure.Mail.MailKit.Tests.HMailServer;
+#endif
 using DevKit.Infrastructure.Mail.MailKit.Tests.Smtp4Dev;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,8 +47,10 @@ public class Testing
                 var mailConfig = provider.GetRequiredService<EmailConfig.OutgoingConfig>();
                 return RestService.For<ISmtp4DevClient>($"http://{mailConfig.ServerAddress}:{port}");
             })
-            .AddMailKit()
-            .AddScoped<Server>()));
+#if OS_WINDOWS
+            .AddScoped<Server>()
+#endif
+            .AddMailKit()));
 
     internal static TService Resolve<TService>() where TService : notnull => _provider.Resolve<TService>();
 

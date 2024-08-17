@@ -5,13 +5,14 @@
   <PropertyGroup>
     <RootNamespace>$(ProductName).Infrastructure.Mail.MailKit.Tests</RootNamespace>
     <AssemblyName>$(ProductName).Infrastructure.Mail.MailKit.Tests</AssemblyName>
+    <DefineConstants Condition="$([MSBuild]::IsOSPlatform('Windows'))">OS_WINDOWS;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="config.json" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
     <COMReference Include="hMailServer">
       <WrapperTool>tlbimp</WrapperTool>
       <VersionMinor>0</VersionMinor>
@@ -21,6 +22,11 @@
       <Isolated>false</Isolated>
       <EmbedInteropTypes>true</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  
+  <ItemGroup Condition="!$([MSBuild]::IsOSPlatform('Windows'))">
+    <Compile Remove="HMailServer\Server.cs" />
+    <Compile Remove="GivenMailKitMailReader.cs" />
   </ItemGroup>
 
   <ItemGroup>
